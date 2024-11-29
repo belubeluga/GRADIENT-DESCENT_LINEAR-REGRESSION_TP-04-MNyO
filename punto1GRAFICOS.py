@@ -107,13 +107,26 @@ plt.show()
 
 
 
-def plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente"):
-    x = np.linspace(-2, 2, 400)
-    y = np.linspace(-1, 3, 400)
+def plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente", colors = [
+                                                                                                '#f8bbd0',  # 200
+                                                                                                '#fce4ec',  # 100
+                                                                                                '#f48fb1',  # 300
+                                                                                                '#f06292',  # 400
+                                                                                                '#ec407a',  # 500
+                                                                                                '#e91e63',  # 600
+                                                                                                '#d81b60',  # 700
+                                                                                                '#c2185b',  # 800
+                                                                                                '#ad1457',  # 900
+                                                                                                '#880e4f'   # 1000
+                                                                                            ]):
+    
+    x = np.linspace(-2.5, 2.5, 400)
+    y = np.linspace(-2.5, 3.5, 400)
     X, Y = np.meshgrid(x, y)
     Z = rosenbrock(X, Y)
 
-    fig = plt.figure(figsize=(20, 20))
+    plt.style.use('seaborn-v0_8-white')
+    fig = plt.figure(figsize=(10, 10))
 
     # First subplot
     ax1 = fig.add_subplot(1, 2, 1, projection='3d')
@@ -122,13 +135,14 @@ def plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradient
         x_vals = trajectory[:, 0]
         y_vals = trajectory[:, 1]
         z_vals = rosenbrock(x_vals, y_vals)
-        ax1.plot(x_vals, y_vals, z_vals, color='red', linewidth=3)
-        ax1.scatter(x_vals, y_vals, z_vals, color='red', s=10)
+        ax1.plot(x_vals, y_vals, z_vals, color=colors[i % len(colors)], linewidth=3)
+        ax1.scatter(x_vals, y_vals, z_vals, color=colors[i % len(colors)], s=10)
     ax1.scatter([1], [1], [rosenbrock(1, 1)], marker='o', color='red', s=100)
     ax1.set_xlabel('$x_{0}$')
     ax1.set_ylabel('$x_{1}$')
     ax1.set_zlabel('$f(x)$')
-    ax1.view_init(20, 20)
+    
+    ax1.view_init(20, 60)
 
     # Second subplot
     ax2 = fig.add_subplot(1, 2, 2, projection='3d')
@@ -137,19 +151,26 @@ def plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradient
         x_vals = trajectory[:, 0]
         y_vals = trajectory[:, 1]
         z_vals = rosenbrock(x_vals, y_vals)
-        ax2.plot(x_vals, y_vals, z_vals, color='red', linewidth=3)
-        ax2.scatter(x_vals, y_vals, z_vals, color='red', s=10)
+        ax2.plot(x_vals, y_vals, z_vals, color=colors[i % len(colors)], linewidth=3)
+        ax2.scatter(x_vals, y_vals, z_vals, color=colors[i % len(colors)], s=10)
     ax2.scatter([1], [1], [rosenbrock(1, 1)], marker='o', color='red', s=100)
     ax2.set_xlabel('$x_{0}$')
     ax2.set_ylabel('$x_{1}$')
     ax2.set_zlabel('$f(x)$')
     ax2.axes.zaxis.set_ticklabels([])
-    ax2.view_init(90, -90)
+    #ax2.view_init(0, 45)
+
+    #ax2.set_xlim(-4, 4)
+    #ax2.set_ylim(-4, 4)
+    #ax2.set_zlim(0, 10000)
+
+    ax2.view_init(20, 20)
+    
 
     plt.show()
 
-
-start_points = [(-1.2, 1), (1.5, 2.7), (0, 0), (0, 2.5), (-1.5, -0.4), (2, 2), (0.7, 0.3), (1.5, -0.5)]  # CI
+# Parámetros iniciales
+start_points = [(np.float64(2.0), np.float64(0.0)), (np.float64(1.4142135623730951), np.float64(1.414213562373095)), (np.float64(1.2246467991473532e-16), np.float64(2.0)), (np.float64(-1.414213562373095), np.float64(1.4142135623730951)), (np.float64(-2.0), np.float64(2.4492935982947064e-16)), (np.float64(-1.4142135623730954), np.float64(-1.414213562373095)), (np.float64(-3.6739403974420594e-16), np.float64(-2.0)), (np.float64(1.4142135623730947), np.float64(-1.4142135623730954))]
 learning_rate = 0.001  # S_{k}
 
 trajectories = []
@@ -162,4 +183,21 @@ for s_p in start_points:
     trajectories.append(trajectory)
 
 # Graficar todas las trayectorias en dos subplots 3D
-plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock")    
+plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock")
+
+
+
+start_points = [(-1,3),(5,2)]
+learning_rate = 0.001  # S_{k}
+
+trajectories = []
+
+for s_p in start_points:
+    print(f"\nTasa de aprendizaje: {learning_rate}")
+    final_point, trajectory = gradient_descent(rosenbrock, grad_rosenbrock, s_p, learning_rate=learning_rate)
+    print(f"Punto final estimado: {final_point}")
+    print(f"Valor de la función en el punto final: {rosenbrock(final_point[0], final_point[1])}")
+    trajectories.append(trajectory)
+
+# Graficar todas las trayectorias en dos subplots 3D
+plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock", colors=['red', 'orange'], )
