@@ -183,7 +183,7 @@ for s_p in start_points:
     trajectories.append(trajectory)
 
 # Graficar todas las trayectorias en dos subplots 3D
-plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock")
+#plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock")
 
 
 
@@ -200,4 +200,117 @@ for s_p in start_points:
     trajectories.append(trajectory)
 
 # Graficar todas las trayectorias en dos subplots 3D
-plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock", colors=['red', 'orange'], )
+#plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock", colors=['red', 'orange'], )
+
+
+
+
+
+
+# Gráfica de la trayectoria en 2D (zoom cerca del mínimo)
+def hessian_rosenbrock(x, y, a=1, b=100):
+    d2f_dx2 = 2 - 4 * b * y + 12 * b * x**2
+    d2f_dy2 = 2 * b
+    d2f_dxdy = -4 * b * x
+    return np.array([[d2f_dx2, d2f_dxdy], [d2f_dxdy, d2f_dy2]])
+
+def newton_method(f, grad_f, hessian_f, start, tol=1e-8, max_iter=100):
+    x = np.array(start, dtype=float)
+    trajectory = [x.copy()]
+    errorsN = [np.linalg.norm(x - np.array([1, 1]))] 
+
+    for i in range(max_iter):
+        grad = grad_f(x[0], x[1])
+        hessian = hessian_f(x[0], x[1])
+
+        x -= np.linalg.inv(hessian) @ grad
+        trajectory.append(x.copy())
+        errorsN.append(np.linalg.norm(x - np.array([1, 1])))  # Calcular distancia al mínimo
+
+
+        if np.linalg.norm(grad) < tol:
+            print(f"Convergencia alcanzada en {i + 1} iteraciones.")
+            break
+    else:
+        print("No se alcanzó la convergencia en el número máximo de iteraciones.")
+    
+    return x, np.array(trajectory), errorsN
+
+start = [-1.5, 2.0]
+learning_rate = 0.001
+
+min_point_gd, trajectory_gd = gradient_descent(rosenbrock, grad_rosenbrock, start, learning_rate, max_iter=10000)
+print(f"Punto mínimo encontrado por descenso de gradiente: {min_point_gd}")
+
+
+min_point_newton, trajectory_newton, errorsN = newton_method(rosenbrock, grad_rosenbrock, hessian_rosenbrock, start)
+print(f"Punto mínimo encontrado por método de Newton: {min_point_newton}")
+#plot_multiple_trajectories([trajectory_newton, trajectory_gd], title="Trayectoria del método de Newton", colors=['#f8bbd0', '#ad1457'])
+
+
+#plt.style.use('dark_background') #style :) seaborn-v0_8-poster  dark_background
+plt.style.use('seaborn-v0_8-white')
+x = np.linspace(0.5, 1.5, 400)
+y = np.linspace(0.5, 1.5, 400)
+X, Y = np.meshgrid(x, y)
+Z = rosenbrock(X, Y)
+
+plt.figure(figsize=(14, 8))
+plt.contour(X, Y, Z, levels=np.logspace(-0.5, 3.5, 20), cmap="coolwarm")
+
+
+plt.plot(trajectory_gd[:, 0], trajectory_gd[:, 1], 'r.-', lw= 5, color='#f8bbd0', markersize=10,  label="Descenso de gradiente")
+plt.plot(trajectory_newton[:, 0], trajectory_newton[:, 1], 'b.-', lw= 5, color= '#d81b60', markersize=10, label="Método de Newton")
+
+plt.plot([1], [1], '*', color="yellow", label="Mínimo", markersize=25)
+
+plt.xlabel("$x$")
+plt.ylabel("$y$")
+plt.title("Comparación de trayectorias", fontsize=20, fontweight='bold', pad=20, fontname='Arial')
+plt.grid(False)
+plt.legend()
+#plt.show()
+
+
+
+
+
+
+
+
+
+def gradient_descent(f, grad_f, start, learning_rate, tol=1e-4, max_iter=5000, a=1, b=100):
+    x = np.array(start, dtype=float)
+    trajectory = [x.copy()]
+    errors = [np.linalg.norm(x - np.array([1, 1]))]  # Distancia inicial al mínimo (1,1)
+
+    for _ in range(max_iter):
+        grad = grad_f(x[0], x[1], a, b)
+        x -= learning_rate * grad
+        trajectory.append(x.copy())
+        errors.append(np.linalg.norm(x - np.array([1, 1])))  # Calcular distancia al mínimo
+
+        if np.linalg.norm(grad) < tol:
+            break
+
+    return np.array(trajectory), np.array(errors)
+
+# Parámetros iniciales
+start_point = (-1.5, 2.0)
+learning_rate = 0.001
+
+# Ejecutar el descenso de gradiente
+trajectory, errorsGD = gradient_descent(rosenbrock, grad_rosenbrock, start_point, learning_rate)
+
+plt.style.use('seaborn-v0_8-white')
+# Gráfica de los errores
+plt.figure(figsize=(10, 5))
+plt.plot(errorsGD[:100], label="Error (distancia al mínimo) del Gradient Descent", color='orange', linewidth=2)
+plt.plot(errorsN[:100], label="Error (distancia al mínimo) del Método de Newton", color='pink', linewidth=2)
+#plt.yscale('log')  # Escala logarítmica para errores
+plt.xlabel("Iteraciones")
+plt.ylabel("Error log")
+plt.title("Convergencia del error hacia el mínimo absoluto")
+plt.grid(True)
+legend = plt.legend(facecolor='white', edgecolor='black', labelcolor='black')
+plt.show()
