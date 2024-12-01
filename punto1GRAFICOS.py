@@ -169,7 +169,6 @@ def plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradient
 
     plt.show()
 
-# Parámetros iniciales
 start_points = [(np.float64(2.0), np.float64(0.0)), (np.float64(1.4142135623730951), np.float64(1.414213562373095)), (np.float64(1.2246467991473532e-16), np.float64(2.0)), (np.float64(-1.414213562373095), np.float64(1.4142135623730951)), (np.float64(-2.0), np.float64(2.4492935982947064e-16)), (np.float64(-1.4142135623730954), np.float64(-1.414213562373095)), (np.float64(-3.6739403974420594e-16), np.float64(-2.0)), (np.float64(1.4142135623730947), np.float64(-1.4142135623730954))]
 learning_rate = 0.001  # S_{k}
 
@@ -182,7 +181,6 @@ for s_p in start_points:
     print(f"Valor de la función en el punto final: {rosenbrock(final_point[0], final_point[1])}")
     trajectories.append(trajectory)
 
-# Graficar todas las trayectorias en dos subplots 3D
 #plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock")
 
 
@@ -199,7 +197,6 @@ for s_p in start_points:
     print(f"Valor de la función en el punto final: {rosenbrock(final_point[0], final_point[1])}")
     trajectories.append(trajectory)
 
-# Graficar todas las trayectorias en dos subplots 3D
 #plot_multiple_trajectories_3d(trajectories, title="Trayectorias del Gradiente Descendente en la Función de Rosenbrock", colors=['red', 'orange'], )
 
 
@@ -207,7 +204,6 @@ for s_p in start_points:
 
 
 
-# Gráfica de la trayectoria en 2D (zoom cerca del mínimo)
 def hessian_rosenbrock(x, y, a=1, b=100):
     d2f_dx2 = 2 - 4 * b * y + 12 * b * x**2
     d2f_dy2 = 2 * b
@@ -225,7 +221,7 @@ def newton_method(f, grad_f, hessian_f, start, tol=1e-8, max_iter=100):
 
         x -= np.linalg.inv(hessian) @ grad
         trajectory.append(x.copy())
-        errorsN.append(np.linalg.norm(x - np.array([1, 1])))  # Calcular distancia al mínimo
+        errorsN.append(np.linalg.norm(x - np.array([1, 1])))
 
 
         if np.linalg.norm(grad) < tol:
@@ -248,15 +244,15 @@ print(f"Punto mínimo encontrado por método de Newton: {min_point_newton}")
 #plot_multiple_trajectories([trajectory_newton, trajectory_gd], title="Trayectoria del método de Newton", colors=['#f8bbd0', '#ad1457'])
 
 
-#plt.style.use('dark_background') #style :) seaborn-v0_8-poster  dark_background
-plt.style.use('seaborn-v0_8-white')
+plt.style.use('dark_background') #style :) seaborn-v0_8-poster  dark_background
+#plt.style.use('seaborn-v0_8-white')
 x = np.linspace(0.5, 1.5, 400)
 y = np.linspace(0.5, 1.5, 400)
 X, Y = np.meshgrid(x, y)
 Z = rosenbrock(X, Y)
 
 plt.figure(figsize=(14, 8))
-plt.contour(X, Y, Z, levels=np.logspace(-0.5, 3.5, 20), cmap="coolwarm")
+contour = plt.contour(X, Y, Z, levels=np.logspace(-0.5, 3.5, 20), cmap="coolwarm")
 
 
 plt.plot(trajectory_gd[:, 0], trajectory_gd[:, 1], 'r.-', lw= 5, color='#f8bbd0', markersize=10,  label="Descenso de gradiente")
@@ -268,6 +264,8 @@ plt.xlabel("$x$")
 plt.ylabel("$y$")
 plt.title("Comparación de trayectorias", fontsize=20, fontweight='bold', pad=20, fontname='Arial')
 plt.grid(False)
+cbar = plt.colorbar(contour)
+cbar.set_label('Valor de la función')
 plt.legend()
 #plt.show()
 
@@ -305,8 +303,8 @@ trajectory, errorsGD = gradient_descent(rosenbrock, grad_rosenbrock, start_point
 plt.style.use('seaborn-v0_8-white')
 # Gráfica de los errores
 plt.figure(figsize=(10, 5))
-plt.plot(errorsGD[:100], label="Error (distancia al mínimo) del Gradient Descent", color='orange', linewidth=2)
-plt.plot(errorsN[:100], label="Error (distancia al mínimo) del Método de Newton", color='pink', linewidth=2)
+plt.plot(errorsGD[:20], label="Error (distancia al mínimo) del Gradient Descent", color='orange', linewidth=2)
+plt.plot(errorsN[:20], label="Error (distancia al mínimo) del Método de Newton", color='pink', linewidth=2)
 #plt.yscale('log')  # Escala logarítmica para errores
 plt.xlabel("Iteraciones")
 plt.ylabel("Error log")
