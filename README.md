@@ -4,6 +4,8 @@ Este trabajo práctico aborda dos problemas clásicos de optimización numérica
 1. La minimización de la **función de Rosenbrock** en 2D.  
 2. La **regresión lineal por mínimos cuadrados** aplicada al dataset California Housing.
 
+📄 [Ver informe del TP04 en PDF](TP04_informe_MNyO.pdf)
+
 ---
 
 ## 🧪 PUNTO 1: Optimización en 2 dimensiones - Función de Rosenbrock
