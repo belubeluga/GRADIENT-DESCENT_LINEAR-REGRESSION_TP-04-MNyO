@@ -1,52 +1,49 @@
-# TP04 - Métodos Numéricos y Optimización (MNyO) - Primer Semestre 2024
+# TP04 - Numerical Methods and Optimization (NM&O) - First Semester 2024
 
-Este trabajo práctico aborda dos problemas clásicos de optimización numérica utilizando el método de **gradiente descendente**:  
-1. La minimización de la **función de Rosenbrock** en 2D.  
-2. La **regresión lineal por mínimos cuadrados** aplicada al dataset California Housing.
+This practical assignment addresses two classical numerical optimization problems using the **gradient descent** method:  
+1. Minimization of the **Rosenbrock function** in 2D.  
+2. **Linear regression via least squares**, applied to the California Housing dataset.
 
-📄 [Descargar informe TP04 en PDF](informe_TP04_MNyO.pdf.zip)
-
----
-
-## 🧪 PUNTO 1: Optimización en 2 dimensiones - Función de Rosenbrock
-
-Se implementa el **algoritmo de gradiente descendente** para minimizar la función:
-
-
-### Objetivos:
-
-- Estudiar la **convergencia** del método en función del **learning rate**.
-- Analizar el impacto de diferentes **condiciones iniciales**.
-- Visualizar trayectorias de descenso en el plano (x, y).
-- (Opcional) Comparar con el **método de Newton**.
+📄 [Download TP04 Report in PDF](informe_TP04_MNyO.pdf.zip)
 
 ---
 
-## 📊 PUNTO 2: Cuadrados Mínimos por Gradiente Descendente
+## 🧪 PART 1: 2D Optimization – Rosenbrock Function
 
-Se realiza una regresión lineal para predecir `MedHouseVal` en el dataset `California Housing` de `sklearn`.
+The **gradient descent algorithm** is implemented to minimize the function:
 
-### Métodos implementados:
+### Objectives:
 
-1. **Pseudoinversa**
-2. **Gradiente descendente**
+- Study the **convergence** of the method based on different **learning rates**  
+- Analyze the impact of varying **initial conditions**  
+- Visualize descent trajectories in the (x, y) plane  
+- *(Optional)* Compare with the **Newton's method**
+
+---
+
+## 📊 PART 2: Least Squares via Gradient Descent
+
+A linear regression model is trained to predict `MedHouseVal` using the `California Housing` dataset from `sklearn`.
+
+### Implemented Methods:
+
+1. **Pseudoinverse**  
+2. **Gradient Descent**  
 3. **Ridge Regression**
 
-### Análisis:
+### Analysis:
 
-- Comparación de soluciones obtenidas por ambos métodos
-- Evolución del error en entrenamiento y testeo
-- Sensibilidad frente al η y regularización
+- Comparison of solutions obtained by each method  
+- Evolution of training and test error  
+- Sensitivity to η (learning rate) and regularization
 
 ---
 
-## ✅ Requisitos
+## ✅ Requirements
 
-- Python 3.x
-- numpy
-- matplotlib
-- pandas
-- scikit-learn
+- Python 3.x  
+- numpy  
+- matplotlib  
+- pandas  
+- scikit-learn  
 - Jupyter Notebook
-
----
